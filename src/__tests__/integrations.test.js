@@ -2,7 +2,7 @@ import React from 'react';
 import Root from 'Root';
 import { mount } from 'enzyme';
 import { App } from 'components/App';
-import { moxios } from 'moxios';
+import moxios from 'moxios';
 
 beforeEach(() => {
     moxios.install();
@@ -19,17 +19,20 @@ afterEach(() => {
     moxios.uninstall();
 });
 
-it('can fetch a list of comments and display them', () => {
-   // Attempt to render the *entire* app
+it('can fetch a list of comments and display them', (done) => {
     const wrapped = mount(
         <Root>
             <App/>
         </Root>
     );
 
-    // find the 'fetchComments' button and click it
     wrapped.find('.fetch-comments').simulate('click');
 
-    // Expect to find a list of comments!
-    expect(wrapped.find('li').length).toEqual(2);
+    // introduce a tiny little pause
+    setTimeout(() => {
+        wrapped.update();
+        expect(wrapped.find('li').length).toEqual(2);
+        done()
+        wrapped.unmount();
+    }, 100);
 });
