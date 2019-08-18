@@ -1,24 +1,33 @@
-import React, { Component } from 'react-dom';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-export default (ChildComponent) => {
+export default ChildComponent => {
     class ComposedComponent extends Component {
+        // Component just got rendered
+        componentDidMount() {
+            this.shouldNavigateAway();
+        }
+
+        // Component just got updated
+        componentDidUpdate() {
+            this.shouldNavigateAway();
+        }
+
+        shouldNavigateAway() {
+            if (!this.props.auth) {
+                console.log('I need to leave');
+                this.props.history.push('/');
+            }
+        }
+
         render() {
             return <ChildComponent/>;
         }
     }
 
-    return ComposedComponent;
+    function mapStateToProps(state) {
+        return {auth: state.auth};
+    }
+
+    return connect(mapStateToProps)(ComposedComponent);
 };
-
-// Imagine we are in CommentBox.js
-// import requireAuth from 'components/requireAuth';
-//
-// class CommentBox {
-//
-// }
-
-export default requireAuth(CommentBox)
-
-
-// Imagine we are in App.js
-// import CommentBox from 'components/CommentBox';
