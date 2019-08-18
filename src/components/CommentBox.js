@@ -11,13 +11,14 @@ class CommentBox extends Component {
     }
 
     // Component just got updated
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate() {
         this.shouldNavigateAway();
     }
 
     shouldNavigateAway() {
         if (!this.props.auth) {
-            console.log('I need to leave')
+            console.log('I need to leave');
+            this.props.history.push('/');
         }
     }
 
