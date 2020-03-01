@@ -4,6 +4,7 @@ export default ({ dispatch }) => next => action => {
     // If it does, then wait for it to resolve
     // if it doesn't, then send the action on to the
     // next middleware
+    // debugger;
     if (!action.payload || !action.payload.then) {
         return next(action);
     }
@@ -12,6 +13,7 @@ export default ({ dispatch }) => next => action => {
     // (get its data) and then create a new action
     // with that data and dispatch it
     action.payload.then(function(response) {
+        debugger;
         const newAction = { ...action, payload: response }
         dispatch(newAction)
     })
